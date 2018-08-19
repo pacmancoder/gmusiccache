@@ -1,6 +1,15 @@
 import getpass
 
+
 class MessageInteraction:
+    def __init__(self, message):
+        self.message = message
+
+    class Result:
+        pass
+
+
+class StatusInteraction:
     def __init__(self, message):
         self.message = message
 
@@ -34,6 +43,9 @@ class ExecutionContext:
         if isinstance(interaction, MessageInteraction):
             print(interaction.message)
             return MessageInteraction.Result()
+        elif isinstance(interaction, StatusInteraction):
+            print(interaction.message)
+            return StatusInteraction.Result()
         elif isinstance(interaction, GetPasswordInteraction):
             return GetPasswordInteraction.Result(getpass.getpass(interaction.prompt + ': '))
         elif isinstance(interaction, QuerySettingsInteraction):

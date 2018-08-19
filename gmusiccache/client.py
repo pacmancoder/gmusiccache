@@ -1,7 +1,9 @@
+from gmusiccache.service.context import ExecutionContext
 from xmlrpc.client import ServerProxy
 
 class Client(ServerProxy):
-    def __init__(self, address = 'http://localhost', port = 9913):
+    def __init__(self, context: ExecutionContext, address = 'http://localhost', port = 9913):
+        self.__context = context
         super().__init__("{0}:{1}/".format(address, port), allow_none=True)
 
     def __enter__(self):

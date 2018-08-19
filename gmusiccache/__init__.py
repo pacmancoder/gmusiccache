@@ -12,34 +12,25 @@ def get_settings():
 
     return arguments.parse_args()
 
-def run_standalone(settings):
-    from gmusiccache.service import Service
-    from gmusiccache.service.context import ExecutionContext, MessageInteraction
-
-    context = ExecutionContext(settings)
-    service = Service(context)
-
-    try:
-        service.login(settings.login, settings.password, settings.device)
-        for song in service.get_all_songs():
-            context.interact(MessageInteraction("{0} - {1} - {2}".format(song.artist, song.album, song.name)))
-
-    finally:
-        service.shutdown()
-
-
 def run_server(settings):
     from gmusiccache.server import Server
     from gmusiccache.service import Service
     from gmusiccache.service.context import ExecutionContext
 
-    Server(Service(ExecutionContext(settings))).run()
+    context = ExecutionContext(settings)
+
+    Server(Service(context)).run()
 
 
-def run_client(settings):
+def run_client(settings, standalone=False):
     from gmusiccache.client import Client
+    from gmusiccache.service import Service
+    from gmusiccache.service.context import ExecutionContext
+    import os
 
-    with Client() as service:
+    context = ExecutionContext(settings)
+
+    with Service(context) if standalone else Client(context) as service:
         logged_in = service.is_logged_in()
 
         print("Is logged in: {0}".format(logged_in))
@@ -49,7 +40,17 @@ def run_client(settings):
             print("Logged in!")
 
         print("Getting all songs...")
-        print(str(service.get_all_songs()))
+        songs = service.get_all_songs()
+        for num, song in enumerate(songs):
+            print('> Downloading song {0} of {1}'.format(num + 1, len(songs)))
+            mp3 = service.download_song(song.id)
+            dir = os.path.join(os.path.expanduser('~'), 'gmusic/{0}/{1}'.format(song.artist, song.album))
+            os.makedirs(dir, exist_ok=True)
+            path = os.path.join(dir, '{0}.mp3'.format(song.name))
+
+            with open(path, 'wb') as file:
+                print('Writing file to path {0}'.format(path))
+                file.write(mp3)
 
 
 def main():
@@ -60,7 +61,7 @@ def main():
     elif settings.mode == 'server':
         run_server(settings)
     else:
-        run_standalone(settings)
+        run_client(settings, True)
 
 if __name__ == '__main__':
     main()
