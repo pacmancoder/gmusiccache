@@ -19,3 +19,6 @@ Library/Tool which allows tou to cache your gmusic library locally
 - Please note that python 3.x binary should be in PATH, not python 2.x
 - GSF can be obtained using application like [this](https://play.google.com/store/apps/details?id=com.evozi.deviceid)
 - If you using two-factor authorization then generate app password and use it when specifying password argument
+- On Windows, if you get error, which tells something like "libmagic library is missing" try the following command to fix the issue:
+  `pip install python-magic-bin==0.4.14`
+  
