@@ -126,7 +126,6 @@ class Service:
         from tempfile import mkstemp
         import os
         import eyed3
-        from eyed3.mp3 import Mp3AudioFile
         from eyed3.id3 import Tag
         from eyed3.id3.frames import ImageFrame
         from datetime import datetime
@@ -200,6 +199,8 @@ class Service:
     def is_logged_in(self):
         return self.__gmusic_client.is_authenticated()
 
+    def set_locale(self, locale):
+        self.__gmusic_client.locale = locale
 
     def get_api(self):
         api = []
@@ -216,6 +217,7 @@ class Service:
         api_function(Service.get_all_songs)
         api_function(Service.get_songs_diff)
         api_function(Service.download_song)
+        api_function(Service.set_locale)
 
         return api
 

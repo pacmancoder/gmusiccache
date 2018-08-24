@@ -1,0 +1,10 @@
+README.md
+gmusiccache/client.py
+gmusiccache/downloader.py
+gmusiccache/server.py
+gmusiccache.egg-info/PKG-INFO
+gmusiccache.egg-info/SOURCES.txt
+gmusiccache.egg-info/dependency_links.txt
+gmusiccache.egg-info/not-zip-safe
+gmusiccache.egg-info/requires.txt
+gmusiccache.egg-info/top_level.txt
